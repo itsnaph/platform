@@ -1,0 +1,16 @@
+; HustleHub local dev PHP configuration
+[PHP]
+extension_dir = "C:\php\ext"
+extension=pdo_mysql
+extension=mysqli
+extension=openssl
+extension=mbstring
+extension=fileinfo
+
+; Session settings
+session.gc_maxlifetime = 1800
+session.cookie_httponly = 1
+
+; Error reporting for dev
+display_errors = On
+error_reporting = E_ALL

@@ -1,0 +1,13 @@
+# Sensitive config — NEVER commit real credentials
+config/db.php
+
+# Uploaded user images
+assets/images/listings/*.jpg
+assets/images/listings/*.png
+assets/images/listings/*.webp
+assets/images/listings/*.gif
+
+# System files
+.DS_Store
+Thumbs.db
+*.log
