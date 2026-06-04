@@ -1,20 +1,57 @@
 # HustleHub — C2C Service Marketplace
 ## ITECA3-12 | Munashe Tsikada | EDUV4881584
 
-> **Deliverable 2:** Prototype + Diagrams + Working Code + Documentation
+> **Deliverable 3:** Prototype + Diagrams + Working Code + Documentation + Hosting
 
 ---
 
 ## Local Development — Quick Start
 
-### Start the server
-```powershell
-C:\php83\php.exe -S localhost:8080 -t "C:\Users\User\Documents\platform"
-```
-Then open **http://localhost:8080** in your browser.
+### Start the server (Windows)
 
-> **Requirements:** PHP 8.3 at `C:\php83` with pdo_mysql, mbstring, openssl, gd, mysqli, fileinfo enabled.  
-> MySQL 9 running on `localhost:3306` (root / no password), database `hustlehub`.
+#### **Easiest: Start Everything at Once**
+Double-click `start-all.ps1` from File Explorer, or run:
+```powershell
+powershell -ExecutionPolicy Bypass -File "start-all.ps1"
+```
+The script:
+- Checks if MySQL is already running — skips start if it is (safe to run repeatedly)
+- Starts MySQL and waits until it is actually ready on port 3306
+- Checks if PHP dev server is already running — skips if it is
+- Starts the PHP dev server and waits until port 8080 is open
+- Opens **http://localhost:8080** in your browser automatically
+
+---
+
+#### **Or: Start Manually (Advanced)**
+
+**Terminal 1 — Start MySQL:**
+```powershell
+powershell -ExecutionPolicy Bypass -File "start-mysql.ps1"
+```
+
+**Terminal 2 — Start PHP Dev Server:**
+```powershell
+powershell -ExecutionPolicy Bypass -File "start-dev-server.ps1"
+```
+
+Wait for MySQL to show `ready for connections`, then open **http://localhost:8080**.
+
+---
+
+#### **Requirements — What Is Actually Installed**
+
+| Component | Version | Path |
+|---|---|---|
+| PHP (active) | 8.5.6 | `C:\Users\User\scoop\apps\php\current\php.exe` |
+| MySQL | 9.7.0 | `C:\Users\User\scoop\apps\mysql\current\bin\` |
+| MySQL data dir | — | `C:\Users\User\scoop\persist\mysql\data` |
+
+> **Note:** `C:\php-official\php.exe` (PHP 8.3.31) is present but has broken extensions
+> (pdo_mysql, mysqli, gd, mbstring all fail to load). **Do not use it.** The startup
+> scripts use Scoop PHP, which has all required extensions working.
+
+---
 
 ### Test credentials
 
@@ -37,25 +74,39 @@ Then open **http://localhost:8080** in your browser.
 | Homepage | http://localhost:8080 |
 | Browse services | http://localhost:8080/pages/browse.php |
 | Search | http://localhost:8080/pages/search.php?q=plumbing |
-| Worker profile | http://localhost:8080/pages/worker_profile.php?id=2 |
+| Worker profile | http://localhost:8080/pages/worker_profile.php?id=3 |
 | My account | http://localhost:8080/pages/my_account.php |
 | Admin login | http://localhost:8080/pages/admin_login.php |
 | Admin dashboard | http://localhost:8080/admin/dashboard.php |
-| Server health | http://localhost:8080/admin/server_health.php |
 
-### Database setup (first time)
+### Database setup
+
+**Already Configured:**
+- Database `hustlehub` pre-created at `C:\Users\User\scoop\persist\mysql\data`
+- Schema imported (users, listings, bookings, transactions, reviews, disputes)
+- Seed data loaded with test accounts and sample services
+
+**If Database Missing (Reset):**
 ```powershell
-mysql -u root hustlehub < database/schema.sql
-mysql -u root hustlehub < database/seed.sql
+# From your project folder, run:
+& "C:\Users\User\scoop\apps\mysql\current\bin\mysql.exe" -u root hustlehub < database/schema.sql
+& "C:\Users\User\scoop\apps\mysql\current\bin\mysql.exe" -u root hustlehub < database/seed.sql
 ```
+
+**Test Credentials** (pre-seeded):
+| Role | Email | Password |
+|---|---|---|
+| Admin | admin@hustlehub.co.za | Password@123 |
+| Worker | thabo@example.co.za | Password@123 |
+| Client | amara@example.co.za | Password@123 |
 
 ---
 
 ## Tech Stack
 - **Frontend:** HTML5, CSS3, Bootstrap 5.3, Bootstrap Icons
 - **JavaScript:** ES6 + jQuery 3.x (dynamic filters, Ajax status updates)
-- **Backend:** PHP 8.x (PDO, bcrypt, sessions, CSRF, RBAC)
-- **Database:** MySQL 8.x (6 tables + audit_log, foreign keys, ENUMs)
+- **Backend:** PHP 8.5 (PDO, bcrypt, sessions, CSRF, RBAC)
+- **Database:** MySQL 9.7 (6 tables + audit_log, foreign keys, ENUMs)
 - **Payment:** PayFast South Africa (sandbox for testing)
 - **Hosting:** InfinityFree (live deployment)
 
@@ -117,7 +168,63 @@ hustlehub/
 
 ---
 
-## Setup on InfinityFree (or any PHP host)
+## Free Hosting Options
+
+### Recommended: InfinityFree + FreeSQLDatabase (100% free, no card)
+
+This is the simplest setup — both services are free forever with no credit card required.
+
+| Service | What it hosts | Free limits |
+|---|---|---|
+| **InfinityFree** (infinityfree.com) | PHP files + web server | Unlimited bandwidth, 5 GB disk, free subdomain |
+| **FreeSQLDatabase** (freesqldatabase.com) | MySQL 8 database | 5 MB storage, 1 database |
+
+**Steps:**
+1. Sign up at infinityfree.com → create a hosting account → note your FTP credentials
+2. Sign up at freesqldatabase.com → create a MySQL database → note host, user, password
+3. Update `config/db.php` with the FreeSQLDatabase credentials
+4. Import `database/schema.sql` then `database/seed.sql` via the phpMyAdmin link they provide
+5. Upload all project files to `htdocs/` via FTP (use FileZilla)
+6. Visit your free subdomain (e.g. `hustlehub.infinityfreeapp.com`)
+
+> **Limitation:** FreeSQLDatabase gives only 5 MB — enough for the seed data and testing.
+> If you need more space, use the InfinityFree built-in MySQL (also free, larger quota).
+
+---
+
+### Alternative: 000webhost (Hostinger's free tier)
+
+Sign up at app.000webhost.com — includes PHP hosting **and** a MySQL database in one place.
+
+| Feature | Limit |
+|---|---|
+| Storage | 300 MB |
+| Bandwidth | 3 GB / month |
+| MySQL | 1 database, 10 MB |
+| PHP version | 8.x |
+| Ads | None |
+
+**Steps:**
+1. Register at app.000webhost.com → create a website
+2. Go to Manage → Database → create a MySQL database
+3. Open File Manager → upload project files to `public_html/`
+4. Import SQL via phpMyAdmin (linked from the database panel)
+5. Update `config/db.php` with the provided credentials
+
+---
+
+### Alternative: Aiven (managed cloud database only)
+
+If you want a more reliable database with a modern UI — use Aiven for the DB and
+InfinityFree for the PHP files.
+
+- Sign up at aiven.io → create a free MySQL service (no card required for trial)
+- Gives 1 GB storage, automatic backups, SSL connection
+- Connect from `config/db.php` using the host/port/user/password from the Aiven console
+
+---
+
+## Deploying to InfinityFree — Step-by-Step
 
 ### Step 1: Database
 1. Log into cPanel → MySQL Databases
@@ -210,6 +317,70 @@ DISPUTE PATH:
 | Disputes (release/refund) | ✅ | ✅ |
 | Users (manage/deactivate) | ✅ | ❌ |
 | Audit Log | ✅ | ❌ |
+
+---
+
+## Troubleshooting
+
+### Root cause: "Service unavailable" on every page
+This means **MySQL is not running**. PHP connects to MySQL on every page load;
+if MySQL is down, every page returns the generic DB error.
+
+**Fix:** Start MySQL first, then the PHP server:
+```powershell
+powershell -ExecutionPolicy Bypass -File "start-mysql.ps1"
+# wait for "ready for connections" then:
+powershell -ExecutionPolicy Bypass -File "start-dev-server.ps1"
+```
+
+### MySQL won't start
+```powershell
+# Check if MySQL is already running:
+netstat -ano | Select-String ":3306"
+
+# If port 3306 is in use, MySQL is already running — don't start again
+# If nothing shows, MySQL isn't running — retry start-mysql.ps1
+```
+
+### PHP showing "could not find driver" or extension errors
+This happens if you run PHP manually using `php` from the terminal instead of through
+the startup script. The system PATH points to Scoop's `php.exe` shim, but the wrong
+`php.ini` may load. Always use `start-dev-server.ps1`.
+
+> **Do not use `C:\php-official\php.exe`** — that installation has broken extensions
+> (pdo_mysql, mysqli, gd, mbstring all fail to load) and will not connect to MySQL.
+
+### Can't access http://localhost:8080
+1. Verify PHP server is running (check the terminal window for "Development Server started")
+2. Verify MySQL is running (check terminal for "ready for connections" on port 3306)
+3. Check no other app is using port 8080: `netstat -ano | Select-String ":8080"`
+
+### Worker profile page redirects to browse.php
+The URL must use a worker's user ID (not admin or moderator). Worker IDs in seed data:
+
+| ID | Name | Email |
+|---|---|---|
+| 3 | Thabo Nkosi | thabo@example.co.za |
+| 4 | Lindiwe Dube | lindiwe@example.co.za |
+| 5 | David Sithole | david@example.co.za |
+| 6 | Moses Khumalo | moses@example.co.za |
+
+Correct URL: `http://localhost:8080/pages/worker_profile.php?id=3`
+
+### Database connection failed / reset database
+```powershell
+# Reset database using Scoop MySQL binary:
+& "C:\Users\User\scoop\apps\mysql\current\bin\mysql.exe" -u root hustlehub < database/schema.sql
+& "C:\Users\User\scoop\apps\mysql\current\bin\mysql.exe" -u root hustlehub < database/seed.sql
+```
+
+### Check config/db.php credentials
+```php
+define('DB_HOST', '127.0.0.1');     // Must be this — not 'localhost'
+define('DB_NAME', 'hustlehub');     // Must be this
+define('DB_USER', 'root');          // Must be this
+define('DB_PASS', '');              // Empty — Scoop MySQL has no root password
+```
 
 ---
 

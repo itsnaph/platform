@@ -9,7 +9,7 @@ $isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']);
 $results = [];
 
 if ($query) {
-    $stmt = $pdo->prepare("SELECT s.id, s.title, s.description, s.category, s.price, u.full_name, u.avg_rating FROM services s JOIN users u ON s.worker_id = u.id WHERE s.status='approved' AND (s.title LIKE ? OR s.description LIKE ? OR s.category LIKE ?) ORDER BY s.created_at DESC LIMIT 20");
+    $stmt = $pdo->prepare("SELECT s.id, s.title, s.description, s.category, s.price, u.full_name, u.avg_rating FROM services s JOIN users u ON s.worker_id = u.id WHERE s.approval_status='approved' AND (s.title LIKE ? OR s.description LIKE ? OR s.category LIKE ?) ORDER BY s.created_at DESC LIMIT 20");
     $likeQuery = '%' . $query . '%';
     $stmt->execute([$likeQuery, $likeQuery, $likeQuery]);
     $results = $stmt->fetchAll();

@@ -13,7 +13,7 @@ $worker=$stmt->fetch();
 if(!$worker) {header('Location: browse.php?err=worker_not_found');exit;}
 
 //Fetch worker's approved services
-$listingsStmt=$pdo->prepare("SELECT id, title, description, category, price FROM services WHERE worker_id=? AND status='approved'");
+$listingsStmt=$pdo->prepare("SELECT id, title, description, category, price FROM services WHERE worker_id=? AND approval_status='approved'");
 $listingsStmt->execute([$workerId]);
 $listings=$listingsStmt->fetchAll();
 

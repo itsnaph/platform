@@ -11,3 +11,6 @@ assets/images/listings/*.gif
 .DS_Store
 Thumbs.db
 *.log
+
+# Claude Code memory (private, local only)
+.claude/
