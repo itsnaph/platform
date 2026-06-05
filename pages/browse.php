@@ -71,6 +71,10 @@ include '../includes/header.php';
              data-cat="<?= e($s['category']) ?>"
              data-price="<?= (int)$s['price'] ?>">
           <div class="card h-100">
+            <?php if (!empty($s['image_path'])): ?>
+              <img src="/<?= e($s['image_path']) ?>" alt="<?= e($s['title']) ?>"
+                   style="width:100%;height:180px;object-fit:cover;border-radius:8px 8px 0 0">
+            <?php endif; ?>
             <div class="card-body">
               <div class="d-flex align-items-center mb-3">
                 <div class="worker-avatar me-3"><?= e(strtoupper(substr($s['full_name'],0,2))) ?></div>

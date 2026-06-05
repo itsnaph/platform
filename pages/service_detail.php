@@ -52,6 +52,10 @@ include '../includes/header.php';
         </ol>
       </nav>
 
+      <?php if (!empty($service['image_path'])): ?>
+        <img src="/<?= e($service['image_path']) ?>" alt="<?= e($service['title']) ?>"
+             style="width:100%;max-height:320px;object-fit:cover;border-radius:12px;margin-bottom:1.25rem">
+      <?php endif; ?>
       <span class="badge-cat mb-2"><?= e($service['category']) ?></span>
       <h1 class="h2 fw-bold mb-3" style="color:var(--primary)"><?= e($service['title']) ?></h1>
       <p><?= nl2br(e($service['description'])) ?></p>

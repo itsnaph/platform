@@ -20,6 +20,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Cannot change own role
     if ($targetId === (int)$_SESSION['user_id']) {
         $msg = 'error_self';
+    } elseif ($action === 'delete') {
+        // Confirm target is not an admin before deleting
+        $row = $pdo->prepare("SELECT role, full_name FROM users WHERE id = ?");
+        $row->execute([$targetId]);
+        $target = $row->fetch();
+        if ($target && $target['role'] !== 'admin') {
+            $pdo->prepare("INSERT INTO audit_log (admin_id, action, target_type, target_id, notes) VALUES (?,?,?,?,?)")
+                ->execute([$_SESSION['user_id'], 'USER_DELETED', 'user', $targetId, "Deleted user: " . $target['full_name']]);
+            $pdo->prepare("DELETE FROM users WHERE id = ? AND role != 'admin'")->execute([$targetId]);
+            $msg = 'success_delete';
+        } else {
+            $msg = 'error_admin';
+        }
     } elseif ($action === 'deactivate') {
         $pdo->prepare("UPDATE users SET role = 'client' WHERE id = ?")
             ->execute([$targetId]);
@@ -68,8 +81,12 @@ $users = $stmt->fetchAll();
 
     <?php if ($msg === 'success_role' || $msg === 'success_deactivate'): ?>
       <div class="alert alert-success">Action completed successfully.</div>
+    <?php elseif ($msg === 'success_delete'): ?>
+      <div class="alert alert-success">User and all their listings have been permanently deleted.</div>
     <?php elseif ($msg === 'error_self'): ?>
       <div class="alert alert-danger">You cannot modify your own account here.</div>
+    <?php elseif ($msg === 'error_admin'): ?>
+      <div class="alert alert-danger">Admin accounts cannot be deleted.</div>
     <?php endif; ?>
 
     <!-- Search -->
@@ -132,6 +149,17 @@ $users = $stmt->fetchAll();
                       <input type="hidden" name="target_user_id" value="<?= $u['id'] ?>">
                       <input type="hidden" name="action" value="deactivate">
                       <button type="submit" class="dropdown-item text-danger">Reset to Client</button>
+                    </form>
+                  </li>
+                  <li>
+                    <form method="POST" class="d-inline"
+                          onsubmit="return confirm('Permanently delete <?= addslashes(e($u['full_name'])) ?> and ALL their listings, bookings and data? This cannot be undone.')">
+                      <input type="hidden" name="csrf_token" value="<?= e($_SESSION['csrf_token']) ?>">
+                      <input type="hidden" name="target_user_id" value="<?= $u['id'] ?>">
+                      <input type="hidden" name="action" value="delete">
+                      <button type="submit" class="dropdown-item text-danger fw-bold">
+                        <i class="bi bi-trash me-1"></i>Delete User &amp; Listings
+                      </button>
                     </form>
                   </li>
                 </ul>

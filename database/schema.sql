@@ -1,14 +1,5 @@
--- ============================================================
 -- HustleHub Database Schema
--- Module: ITECA3-12 | Student: Munashe Tsikada | EDUV4881584
 -- Stack: MySQL 8.x
--- ============================================================
-
-CREATE DATABASE IF NOT EXISTS hustlehub
-  CHARACTER SET utf8mb4
-  COLLATE utf8mb4_unicode_ci;
-
-USE hustlehub;
 
 -- ============================================================
 -- TABLE 1: users

@@ -1,10 +1,5 @@
--- ============================================================
--- HustleHub SEED DATA — ITECA3-12 | Munashe Tsikada
--- Run AFTER schema.sql. Provides realistic test data.
--- Passwords below are bcrypt of "Password@123"
--- ============================================================
-
-USE hustlehub;
+-- HustleHub Seed Data — run AFTER schema.sql
+-- Passwords are bcrypt of "Password@123"
 
 -- ── USERS ─────────────────────────────────────────────────────
 -- Super Admin
