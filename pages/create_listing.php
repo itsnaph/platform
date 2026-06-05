@@ -31,9 +31,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $ext     = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
         $allowedExts = ['jpg', 'jpeg', 'png', 'webp'];
 
+        $allowedMimes = ['image/jpeg', 'image/png', 'image/webp'];
+        $finfo        = new finfo(FILEINFO_MIME_TYPE);
+        $mime         = $finfo->file($file['tmp_name']);
+
         if ($file['size'] > $maxSize) {
             $error = 'Image must be under 2MB.';
-        } elseif (!in_array($ext, $allowedExts)) {
+        } elseif (!in_array($ext, $allowedExts) || !in_array($mime, $allowedMimes)) {
             $error = 'Only JPG, PNG, or WebP images are accepted.';
         } else {
             $filename  = uniqid('', true) . '.' . $ext;

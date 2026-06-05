@@ -6,7 +6,7 @@ include '../includes/header.php';
 ?>
 <main>
   <!-- Hero -->
-  <div class="hero py-5 text-center" style="background:linear-gradient(135deg,#0A2342 0%,#163356 100%);color:#fff">
+  <div class="hero">
     <div class="container">
       <h1 class="fw-bold mb-3">How HustleHub Works</h1>
       <p class="lead" style="opacity:0.85;max-width:600px;margin:0 auto">

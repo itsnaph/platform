@@ -363,4 +363,3 @@ define('DB_PASS', '');              // Empty — Scoop MySQL has no root passwor
 
 ---
 
-*ITECA3-12 — Web Development and e-Commerce | NQF Level 7 | Eduvos*

@@ -26,7 +26,7 @@
     </div>
     <hr style="border-color:rgba(255,255,255,0.15)">
     <p class="text-center small mb-0" style="color:rgba(255,255,255,0.5)">
-      &copy; <?= date('Y') ?> HustleHub &mdash; ITECA3-12 Academic Project &mdash; Munashe Tsikada (EDUV4881584)
+      &copy; <?= date('Y') ?> HustleHub. All rights reserved.
     </p>
   </div>
 </footer>

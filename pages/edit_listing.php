@@ -35,10 +35,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Handle image upload
         $imagePath = $service['image_path']; // keep old image unless new one uploaded
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-            $ext         = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
-            $allowedExts = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+            $ext          = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
+            $allowedExts  = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+            $allowedMimes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+            $finfo        = new finfo(FILEINFO_MIME_TYPE);
+            $mime         = $finfo->file($_FILES['image']['tmp_name']);
 
-            if (!in_array($ext, $allowedExts)) {
+            if (!in_array($ext, $allowedExts) || !in_array($mime, $allowedMimes)) {
                 $error = 'Only JPEG, PNG, WebP or GIF images are allowed.';
             } elseif ($_FILES['image']['size'] > 2 * 1024 * 1024) {
                 $error = 'Image must be under 2 MB.';
