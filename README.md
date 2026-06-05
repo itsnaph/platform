@@ -170,57 +170,36 @@ hustlehub/
 
 ## Free Hosting Options
 
-### Recommended: InfinityFree + FreeSQLDatabase (100% free, no card)
+### Recommended: InfinityFree + Aiven (100% free, no card required)
 
-This is the simplest setup — both services are free forever with no credit card required.
+The only fully free, production-capable combination in 2026.
 
 | Service | What it hosts | Free limits |
 |---|---|---|
-| **InfinityFree** (infinityfree.com) | PHP files + web server | Unlimited bandwidth, 5 GB disk, free subdomain |
-| **FreeSQLDatabase** (freesqldatabase.com) | MySQL 8 database | 5 MB storage, 1 database |
+| **InfinityFree** (infinityfree.com) | PHP files + web server | 5 GB disk, unlimited bandwidth, free subdomain |
+| **Aiven** (aiven.io) | Managed MySQL database | Free tier — 1 DB, automated backups, SSL |
 
 **Steps:**
-1. Sign up at infinityfree.com → create a hosting account → note your FTP credentials
-2. Sign up at freesqldatabase.com → create a MySQL database → note host, user, password
-3. Update `config/db.php` with the FreeSQLDatabase credentials
-4. Import `database/schema.sql` then `database/seed.sql` via the phpMyAdmin link they provide
-5. Upload all project files to `htdocs/` via FTP (use FileZilla)
+1. Sign up at **aiven.io** → New Service → MySQL → select Free tier → note your host, port, user, password
+2. In the Aiven console, open your MySQL service → use the built-in query editor to run `database/schema.sql` then `database/seed.sql`
+3. Sign up at **infinityfree.com** → create a hosting account → note your FTP credentials and cPanel URL
+4. Update `config/db.php` with the Aiven credentials (host, port, DB name, user, password)
+5. Upload all project files to `htdocs/` via FTP — FileZilla is recommended (free at filezilla-project.org)
 6. Visit your free subdomain (e.g. `hustlehub.infinityfreeapp.com`)
 
-> **Limitation:** FreeSQLDatabase gives only 5 MB — enough for the seed data and testing.
-> If you need more space, use the InfinityFree built-in MySQL (also free, larger quota).
+> **Shortcut:** InfinityFree also includes a built-in MySQL database (50 MB per DB) via cPanel → MySQL Databases + phpMyAdmin. For a demo or student project this is enough and skips the Aiven setup entirely — just follow the Deploying to InfinityFree steps below.
 
 ---
 
-### Alternative: 000webhost (Hostinger's free tier)
+### Not free — common misconceptions (2026)
 
-Sign up at app.000webhost.com — includes PHP hosting **and** a MySQL database in one place.
-
-| Feature | Limit |
+| Service | Why it is not free |
 |---|---|
-| Storage | 300 MB |
-| Bandwidth | 3 GB / month |
-| MySQL | 1 database, 10 MB |
-| PHP version | 8.x |
-| Ads | None |
-
-**Steps:**
-1. Register at app.000webhost.com → create a website
-2. Go to Manage → Database → create a MySQL database
-3. Open File Manager → upload project files to `public_html/`
-4. Import SQL via phpMyAdmin (linked from the database panel)
-5. Update `config/db.php` with the provided credentials
-
----
-
-### Alternative: Aiven (managed cloud database only)
-
-If you want a more reliable database with a modern UI — use Aiven for the DB and
-InfinityFree for the PHP files.
-
-- Sign up at aiven.io → create a free MySQL service (no card required for trial)
-- Gives 1 GB storage, automatic backups, SSL connection
-- Connect from `config/db.php` using the host/port/user/password from the Aiven console
+| **Railway** | 30-day $5 trial only — requires credit card, $5/month minimum after trial |
+| **Render** | No MySQL on free tier — PostgreSQL only; PHP requires Docker |
+| **PlanetScale** | Free Hobby tier removed March 2024 |
+| **000webhost** | Free tier discontinued by Hostinger — no longer available |
+| **FreeSQLDatabase** | 5 MB cap — development and testing only, not production |
 
 ---
 
