@@ -1,7 +1,6 @@
 # HustleHub — C2C Service Marketplace
 
-**Live site:** https://hustlehub.freepage.cc
-**Hosted on:** InfinityFree (PHP + MySQL)
+**Hosted on:** Localhost via Cloudflare Tunnel (run `start-demo.ps1` to get the live URL)
 
 ---
 

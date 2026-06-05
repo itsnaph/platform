@@ -1,11 +1,11 @@
 -- HustleHub Database Schema
 -- Stack: MySQL 8.x
 
--- ============================================================
+
 -- TABLE 1: users
 -- Stores all users. Role column controls access level.
 -- OTP verification status tracked via is_verified column.
--- ============================================================
+
 CREATE TABLE IF NOT EXISTS users (
   id            INT UNSIGNED     NOT NULL AUTO_INCREMENT PRIMARY KEY,
   full_name     VARCHAR(120)     NOT NULL,
@@ -23,10 +23,10 @@ CREATE TABLE IF NOT EXISTS users (
   updated_at    TIMESTAMP        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
--- ============================================================
+
 -- TABLE 2: services
 -- Worker service listings. Admin must approve before visible.
--- ============================================================
+
 CREATE TABLE IF NOT EXISTS services (
   id              INT UNSIGNED     NOT NULL AUTO_INCREMENT PRIMARY KEY,
   worker_id       INT UNSIGNED     NOT NULL,
@@ -43,12 +43,12 @@ CREATE TABLE IF NOT EXISTS services (
     FOREIGN KEY (worker_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- ============================================================
+
 -- TABLE 3: bookings
 -- One row per client booking. Status follows defined lifecycle.
 -- pending -> confirmed -> in_progress -> completed
 -- OR: any active status -> disputed / cancelled
--- ============================================================
+
 CREATE TABLE IF NOT EXISTS bookings (
   id           INT UNSIGNED  NOT NULL AUTO_INCREMENT PRIMARY KEY,
   service_id   INT UNSIGNED  NOT NULL,
@@ -68,11 +68,10 @@ CREATE TABLE IF NOT EXISTS bookings (
     FOREIGN KEY (worker_id)  REFERENCES users(id)    ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- ============================================================
+
 -- TABLE 4: transactions
 -- One financial record per booking. Escrow lifecycle:
--- held -> released (completion) OR held -> refunded (dispute)
--- ============================================================
+
 CREATE TABLE IF NOT EXISTS transactions (
   id             INT UNSIGNED  NOT NULL AUTO_INCREMENT PRIMARY KEY,
   booking_id     INT UNSIGNED  NOT NULL UNIQUE,
@@ -89,10 +88,10 @@ CREATE TABLE IF NOT EXISTS transactions (
     FOREIGN KEY (released_by) REFERENCES users(id)    ON DELETE SET NULL
 ) ENGINE=InnoDB;
 
--- ============================================================
+
 -- TABLE 5: reviews
 -- Post-completion ratings 1-5. One review per party per booking.
--- ============================================================
+
 CREATE TABLE IF NOT EXISTS reviews (
   id           INT UNSIGNED  NOT NULL AUTO_INCREMENT PRIMARY KEY,
   booking_id   INT UNSIGNED  NOT NULL,
@@ -112,10 +111,10 @@ CREATE TABLE IF NOT EXISTS reviews (
     FOREIGN KEY (reviewee_id) REFERENCES users(id)    ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- ============================================================
+
 -- TABLE 6: disputes
 -- Raised when a booking goes wrong. Admin resolves.
--- ============================================================
+
 CREATE TABLE IF NOT EXISTS disputes (
   id              INT UNSIGNED  NOT NULL AUTO_INCREMENT PRIMARY KEY,
   booking_id      INT UNSIGNED  NOT NULL,

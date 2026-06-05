@@ -1,4 +1,13 @@
 <?php
+$isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+        || (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https');
+session_set_cookie_params([
+    'lifetime' => 0,
+    'path'     => '/',
+    'secure'   => $isHttps,
+    'httponly' => true,
+    'samesite' => 'Lax',
+]);
 session_start();
 
 //Generate CSRF token once per session
@@ -10,7 +19,7 @@ if (empty($_SESSION['csrf_token'])) {
 if (isset($_SESSION['last_active']) && (time() - $_SESSION['last_active'] > 1800)) {
     session_unset();
     session_destroy();
-    header('Location: /login.php?reason=timeout');
+    header('Location: /pages/login.php?reason=timeout');
     exit;
 }
 $_SESSION['last_active'] = time();
@@ -19,7 +28,7 @@ $_SESSION['last_active'] = time();
 function requireRole($role)
 {
     if (!isset($_SESSION['user_id'], $_SESSION['role'])) {
-        header('Location: /login.php');
+        header('Location: /pages/login.php');
         exit;
     }
     if ($_SESSION['role'] !== $role) {

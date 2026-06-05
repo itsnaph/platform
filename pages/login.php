@@ -1,7 +1,9 @@
 <?php
+// FILE: pages/login.php
 require_once '../includes/auth.php';
 require_once '../config/db.php';
 
+// Already logged in — send to homepage
 if (isLoggedIn()) { header('Location: ../index.php'); exit; }
 
 $error    = '';
@@ -13,25 +15,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email    = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
 
+    // Basic validation
     if (!$email || !$password) {
         $error = 'Please enter your email and password.';
     } else {
+        // Look up user by email
         $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
         $stmt->execute([$email]);
         $user = $stmt->fetch();
 
         if ($user && password_verify($password, $user['password'])) {
-            $_SESSION['user_id']    = $user['id'];
-            $_SESSION['user_name']  = $user['full_name'];
-            $_SESSION['user_email'] = $user['email'];
-            $_SESSION['role']       = $user['role'];
+            // Store user info in session
+            $_SESSION['user_id']     = $user['id'];
+            $_SESSION['user_name']   = $user['full_name'];
+            $_SESSION['user_email']  = $user['email'];
+            $_SESSION['role']        = $user['role'];
             $_SESSION['last_active'] = time();
 
-            // Role-based redirect
+            // Role-based redirect after login
             if (in_array($user['role'], ['admin','moderator'])) {
                 header('Location: ../admin/dashboard.php'); exit;
             } elseif ($user['role'] === 'worker') {
-                header('Location: worker_dashboard.php'); exit;
+                header('Location: /pages/worker_dashboard.php'); exit;
             } else {
                 header('Location: ' . ($redirect ?: '../index.php')); exit;
             }

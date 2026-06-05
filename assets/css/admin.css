@@ -8,7 +8,7 @@
   --admin-card-bg:  #FFFFFF;
 }
 
-/* ── Layout ────────────────────────────────────────────────── */
+/* Layout */
 body {
   font-family: 'Inter', 'Segoe UI', sans-serif;
   background: var(--admin-bg);
@@ -38,7 +38,7 @@ body {
   .admin-wrap { margin-left: 0; }
 }
 
-/* ── Sidebar brand ──────────────────────────────────────────── */
+/* Sidebar brand */
 .admin-brand {
   padding: 0.75rem 1.25rem 1.25rem;
   border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -55,7 +55,7 @@ body {
   font-size: 0.75rem;
 }
 
-/* ── Nav links ──────────────────────────────────────────────── */
+/* Nav links */
 .admin-nav-list {
   list-style: none;
   padding: 0;
@@ -88,7 +88,7 @@ body {
 }
 .admin-nav-link i { font-size: 1rem; }
 
-/* ── Page title ─────────────────────────────────────────────── */
+/* Page title */
 .admin-page-title {
   font-size: 1.4rem;
   font-weight: bold;
@@ -96,7 +96,7 @@ body {
   margin-bottom: 0.25rem;
 }
 
-/* ── Stat cards ─────────────────────────────────────────────── */
+/* Stat cards */
 .stat-card {
   background: #fff;
   border-radius: 6px;
@@ -108,7 +108,7 @@ body {
 .stat-value { font-size: 1.4rem; font-weight: bold; color: var(--admin-primary); line-height: 1.2; }
 .stat-label { font-size: 0.8rem; color: #6c757d; margin-top: 0.2rem; }
 
-/* ── Action card links ──────────────────────────────────────── */
+/* Action card links */
 .admin-action-card {
   display: flex;
   align-items: center;
@@ -127,7 +127,7 @@ body {
   color: var(--admin-accent);
 }
 
-/* ── Status badges ──────────────────────────────────────────── */
+/* Status badges */
 .badge-pending    { background: #fff3cd; color: #856404; border-radius:20px; padding:0.25em 0.7em; font-size:0.75rem; font-weight:600; }
 .badge-confirmed  { background: #cff4fc; color: #055160; border-radius:20px; padding:0.25em 0.7em; font-size:0.75rem; font-weight:600; }
 .badge-in_progress{ background: #d1e7dd; color: #0a3622; border-radius:20px; padding:0.25em 0.7em; font-size:0.75rem; font-weight:600; }
@@ -135,7 +135,7 @@ body {
 .badge-disputed   { background: #f8d7da; color: #721c24; border-radius:20px; padding:0.25em 0.7em; font-size:0.75rem; font-weight:600; }
 .badge-cancelled  { background: #e2e3e5; color: #383d41; border-radius:20px; padding:0.25em 0.7em; font-size:0.75rem; font-weight:600; }
 
-/* ── Nav pills override ─────────────────────────────────────── */
+/* Nav pills override */
 .nav-pills .nav-link.active {
   background: var(--admin-primary) !important;
   color: #fff !important;
